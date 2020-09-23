@@ -1,2 +1,5 @@
-This page is empty, please come back later  
-See you soon!!
+---------------------------    
+DICTIONARY BUILT USING JAVA  
+---------------------------  
+  
+This is a simple java project made by Bin and JonnyJack for our OOP assignment.
