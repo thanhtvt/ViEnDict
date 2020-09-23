@@ -4,14 +4,12 @@ public class Dictionary {
 
     public void setLength(int len) {
         length = len;
+        vocab = new Word[length];
+        for(int i = 0; i < length; i++) {
+            vocab[i] = new Word();
+        }
     }
     public int getLength() {
         return length;
     }
-
-    Dictionary(int len) {
-        length = len;
-        vocab = new Word[length];
-    }
-    Dictionary() {}
 }
