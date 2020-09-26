@@ -1,9 +1,12 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
 public class DictionaryManagement {
     public Dictionary dict = new Dictionary();
+    private Map<String, String> wordPair = new HashMap<String, String>();
 
     public void insertFromCommandLine() {
         Scanner sc = new Scanner(System.in);
@@ -13,6 +16,7 @@ public class DictionaryManagement {
         for (int i = 0; i < numberOfWords; i++) {
             dict.vocab[i].setWordTarget(sc.nextLine());
             dict.vocab[i].setWordExplain(sc.nextLine());
+            wordPair.put(dict.vocab[i].getWordTarget(), dict.vocab[i].getWordExplain());
         }
         sc.close();
     }
@@ -33,7 +37,6 @@ public class DictionaryManagement {
         File file = new File("dictionaries.txt");
         Scanner sc = new Scanner(file);
 
-        // Create an object for vocab
         int length = findLengthInFile();
         dict.setLength(length);
         int i = 0;
@@ -47,12 +50,27 @@ public class DictionaryManagement {
             String newMeaning2;
             if(sc.hasNextLine()) {
                 newMeaning2 = sc.nextLine();
-            }
-            else {
+            } else {
                 newMeaning2 = "";
             }
             dict.vocab[i].setWordExplain(newMeaning1 + newMeaning2);
+            wordPair.put(newWord, newMeaning1 + newMeaning2);
             i++;
+        }
+        sc.close();
+    }
+
+    public void dictionaryLookup() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Your word is: ");
+        while(sc.hasNext()) {
+            String target = sc.next();
+            if(wordPair.get(target) != null) {
+                System.out.println("It means: " + wordPair.get(target));
+            } else {
+                System.out.println("Not found! Please wait for our upcoming update.");
+            }
+            System.out.print("Your word is: ");
         }
         sc.close();
     }
