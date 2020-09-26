@@ -3,8 +3,8 @@ import java.io.FileNotFoundException;
 public class DictionaryCommandline {
     DictionaryManagement dictManage = new DictionaryManagement();
 
-    final int spaceNoEng = 9;
-    final int spaceEngViet = 28;
+    private final int spaceNoEng = 9;
+    private final int spaceEngViet = 28;
 
     public void createOutput(int no, String target, String explain) {
         if (no == 0) {
@@ -25,25 +25,32 @@ public class DictionaryCommandline {
     }
 
     public void showAllWords() {
+        System.out.println("Welcome to ViEnDictionary!!\n");
         for (int i = -1; i < dictManage.dict.getLength(); i++) {
             if (i != -1) {
                 String newWord = dictManage.dict.vocab[i].getWordTarget();
                 String newMeaning = dictManage.dict.vocab[i].getWordExplain();
                 createOutput(i + 1, newWord, newMeaning);
-            } else {
+            } 
+            else {
                 createOutput(i + 1, "", "");
             }
         }
     }
 
     public void dictionaryBasic() {
-        // dictManage.insertFromCommandLine();
+        dictManage.insertFromCommandLine();
+        showAllWords();
+    }
+
+    public void dictionaryAdvanced() {
         try {
             dictManage.insertFromFile();
+            showAllWords();
+            dictManage.dictionaryLookup();
         } catch (FileNotFoundException e) {
             System.out.println("Cannot read file!");
             e.printStackTrace();
         }
-        showAllWords();
     }
 }
