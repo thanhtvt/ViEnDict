@@ -7,21 +7,27 @@ import java.io.FileNotFoundException;
 public class DictionaryManagement {
     public Dictionary dict = new Dictionary();
     private Map<String, String> wordPair = new HashMap<String, String>();
+    public TernarySearchTree tree = new TernarySearchTree();
+    public Scanner sc = new Scanner(System.in);
 
     public void insertFromCommandLine() {
-        Scanner sc = new Scanner(System.in);
         int numberOfWords = sc.nextInt();
         sc.nextLine();
         dict.setLength(numberOfWords);
-        for (int i = 0; i < numberOfWords; i++) {
+        for(int i = 0; i < dict.getLength(); i++) {
             dict.vocab[i].setWordTarget(sc.nextLine());
             dict.vocab[i].setWordExplain(sc.nextLine());
             wordPair.put(dict.vocab[i].getWordTarget(), dict.vocab[i].getWordExplain());
+            tree.insert(dict.vocab[i].getWordTarget());
         }
-        sc.close();
     }
 
-    public int findLengthInFile() throws FileNotFoundException {
+    /**
+     * A function for insertFromFile()
+     * @return number of words in file
+     * @throws FileNotFoundException
+     */
+    private int findLengthInFile() throws FileNotFoundException {
         File file = new File("dictionaries.txt");
         Scanner sc = new Scanner(file);
         int length = 0;
@@ -55,6 +61,7 @@ public class DictionaryManagement {
             }
             dict.vocab[i].setWordExplain(newMeaning1 + newMeaning2);
             wordPair.put(newWord, newMeaning1 + newMeaning2);
+            tree.insert(newWord);
             i++;
         }
         sc.close();
@@ -68,10 +75,38 @@ public class DictionaryManagement {
             if(wordPair.get(target) != null) {
                 System.out.println("It means: " + wordPair.get(target));
             } else {
-                System.out.println("Not found! Please wait for our upcoming update.");
+                System.out.println("Not found! Please wait for my upcoming update.");
             }
             System.out.print("Your word is: ");
         }
         sc.close();
     }
+
+    private void insertIntoDictionary() {
+        int i = 0;
+        for(Map.Entry<String, String> mapElement : wordPair.entrySet()) {
+            String key = mapElement.getKey();
+            dict.vocab[i].setWordTarget(key);
+            String value = mapElement.getValue();
+            dict.vocab[i].setWordExplain(value);
+            i++;
+        }
+    }
+
+    public void addWord() {
+        // Increase number of words by 1.
+        dict.setLength(dict.getLength() + 1);
+
+        System.out.print("The word you add is: ");
+        
+        String newWord = sc.nextLine();
+        System.out.print("It means: ");
+        String newMeaning = sc.nextLine();
+        wordPair.put(newWord, newMeaning);
+        tree.insert(newWord);
+
+        // Recall object
+        insertIntoDictionary();
+    }
+
 }

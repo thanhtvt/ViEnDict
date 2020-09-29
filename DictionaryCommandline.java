@@ -1,12 +1,14 @@
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class DictionaryCommandline {
     DictionaryManagement dictManage = new DictionaryManagement();
 
     private final int spaceNoEng = 9;
     private final int spaceEngViet = 28;
+    public Scanner sc = new Scanner(System.in);
 
-    public void createOutput(int no, String target, String explain) {
+    private void createOutput(int no, String target, String explain) {
         if (no == 0) {
             System.out.println("No       | English                     | Vietnamese");
             return;
@@ -52,5 +54,11 @@ public class DictionaryCommandline {
             System.out.println("Cannot read file!");
             e.printStackTrace();
         }
+    }
+
+    public void dictionarySearcher() {
+        String pattern = sc.nextLine();
+        dictManage.tree.autoComplete(pattern);
+        //sc.close();
     }
 }
