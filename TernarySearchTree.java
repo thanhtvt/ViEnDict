@@ -28,6 +28,32 @@ public class TernarySearchTree {
         root = insertUtil(root, word.toCharArray(), 0);
     }
 
+    private void deleteUtil(Node r, char[] input, int pos) {
+        // Base case
+        if(r == null) return;
+        
+        if(input[pos] < r.getData()) {
+            deleteUtil(r.left, input, pos);
+        }
+        else if(input[pos] > r.getData()) {
+            deleteUtil(r.right, input, pos);
+        }
+        else {
+            if(pos == input.length - 1 && r.getEnding()) {
+                // Remove isEndOfString flag
+                r.setEnding(false);
+                return;
+            }
+            else {
+                deleteUtil(r.middle, input, pos + 1);
+            }
+        }
+    }
+
+    public void delete(String word) {
+        deleteUtil(root, word.toCharArray(), 0);
+    }
+
     private void traverse(Node r, String pattern, char[] word, int depth) {
         if (r != null) 
         { 
