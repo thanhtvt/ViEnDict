@@ -4,6 +4,9 @@ public class Run {
         dictCom.dictionaryBasic();
         //dictCom.dictionaryAdvanced();
         dictCom.dictManage.addWord();
-        dictCom.dictionarySearcher();
+        //dictCom.dictionarySearcher();
+        dictCom.dictManage.deleteWord("hello");
+        dictCom.showAllWords();
+        dictCom.dictManage.dictionaryExportToFile();
     }
 }
