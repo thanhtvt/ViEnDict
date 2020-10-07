@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class DictionaryCommandline {
@@ -46,14 +45,9 @@ public class DictionaryCommandline {
     }
 
     public void dictionaryAdvanced() {
-        try {
-            dictManage.insertFromFile();
-            showAllWords();
-            dictManage.dictionaryLookup();
-        } catch (FileNotFoundException e) {
-            System.out.println("Cannot read file!");
-            e.printStackTrace();
-        }
+        dictManage.insertFromFile();
+        showAllWords();
+        dictManage.dictionaryLookup();
     }
 
     public void dictionarySearcher() {
