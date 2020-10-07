@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class DictionaryManagement {
     public Dictionary dict = new Dictionary();
-    private Map<String, String> wordPair = new HashMap<String, String>();
+    public Map<String, String> wordPair = new HashMap<String, String>();
     public TernarySearchTree tree = new TernarySearchTree();
     public Scanner sc = new Scanner(System.in);
 
@@ -25,49 +25,51 @@ public class DictionaryManagement {
     }
 
     /**
-     * A function for insertFromFile()
-     * 
-     * @return number of words in file
-     * @throws FileNotFoundException
+     * Insert data for dictionary from file.
+     * @return number of words in file.
+     * @throws FileNotFoundException.
      */
-    private int findLengthInFile() throws FileNotFoundException {
-        File file = new File("dictionaries.txt");
-        Scanner sc = new Scanner(file);
-        int length = 0;
-        while (sc.hasNextLine()) {
-            sc.nextLine();
-            length++;
-        }
-        sc.close();
-        return length;
-    }
-
-    public void insertFromFile() throws FileNotFoundException {
-        File file = new File("dictionaries.txt");
-        Scanner sc = new Scanner(file);
-
-        int length = findLengthInFile();
-        dict.setLength(length);
-        int i = 0;
+    public void insertFromFile() {
+        File file = new File("data.dict");
+        Scanner sc;
 
         // Read from file
-        while (sc.hasNextLine()) {
-            dict.vocab[i] = new Word();
-            String newWord = sc.next();
-            dict.vocab[i].setWordTarget(newWord);
-            String newMeaning1 = sc.next();
-            String newMeaning2;
-            if (sc.hasNextLine()) {
-                newMeaning2 = sc.nextLine();
-            } else {
-                newMeaning2 = "";
+        try {
+            sc = new Scanner(file);
+            int i = 0;
+            String lexicon, definition;
+            while (sc.hasNextLine()) {
+                String temp = "10";
+                String firstLine = sc.nextLine();
+                int pos = firstLine.indexOf('/');
+                if(pos > 0) {
+                    lexicon = firstLine.substring(1, pos - 1);
+                } 
+                else {
+                    lexicon = firstLine.substring(1);
+                }
+                definition = firstLine.substring(1);
+                while(Character.compare(temp.charAt(0), '@') != 0) {
+                    temp = sc.nextLine();
+                    if(temp.equals("")) {
+                        break;
+                    }
+                    definition = definition + "\n" + temp;
+                    if(!sc.hasNextLine()) {
+                        break;
+                    }
+                }
+                dict.vocab[i].setWordTarget(lexicon);
+                dict.vocab[i].setWordExplain(definition);
+                wordPair.put(lexicon, definition);
+                tree.insert(lexicon);
+                i++;
             }
-            dict.vocab[i].setWordExplain(newMeaning1 + newMeaning2);
-            wordPair.put(newWord, newMeaning1 + newMeaning2);
-            tree.insert(newWord);
-            i++;
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot read file");
+            e.printStackTrace();
         }
-        sc.close();
     }
 
     public void dictionaryLookup() {
