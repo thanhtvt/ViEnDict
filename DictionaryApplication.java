@@ -29,9 +29,6 @@ public class DictionaryApplication extends JFrame implements ListSelectionListen
 
         setSizeOfComponent();
 
-        defDisplay.setBackground(Color.LIGHT_GRAY);
-        defDisplay.setEditable(false);
-
         add(textBox);
         add(lexPanel);
         add(defPanel);
@@ -58,7 +55,7 @@ public class DictionaryApplication extends JFrame implements ListSelectionListen
         // Create list holding data from file
         DefaultListModel<String> vocabularyList = new DefaultListModel<>();
         addWordsTo(vocabularyList);
-        
+
         lexiconList = new JList<>(vocabularyList);
         lexiconList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lexiconList.setVisibleRowCount(26);
@@ -77,6 +74,8 @@ public class DictionaryApplication extends JFrame implements ListSelectionListen
         defPanel = new JPanel();
         defPanel.setLayout(new BorderLayout());
         defPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        defDisplay.setBackground(Color.LIGHT_GRAY);
+        defDisplay.setEditable(false);
 
         // Set scroll bar for panel
         JScrollPane defScroll = new JScrollPane(defDisplay);
@@ -118,6 +117,25 @@ public class DictionaryApplication extends JFrame implements ListSelectionListen
         defDisplay.setText(definitionValue);
     }
 
+    private int binarySearch(JList<String> list, String pattern, int left, int right) {
+        if(right >= left) {
+            int mid = left + (right - left) / 2;
+            String currentWord = list.getModel().getElementAt(mid);
+            int cmpValue = pattern.compareTo(currentWord);
+            if(cmpValue > 0) {
+                return binarySearch(list, pattern, mid + 1, right);
+            }
+            else if(cmpValue < 0) {
+                return binarySearch(list, pattern, left, mid - 1);
+            }
+            else {
+                return mid;
+            }
+        }
+        // If it reaches here, then list doesn't contain pattern
+        return -1;
+    }
+
     @Override
     public void valueChanged(ListSelectionEvent e) {
         showDefinition();
@@ -125,13 +143,29 @@ public class DictionaryApplication extends JFrame implements ListSelectionListen
 
     @Override
     public void insertUpdate(DocumentEvent e) {
+        String pattern = textBox.getText();
+
+        // Get size of list
+        int size = lexiconList.getModel().getSize();
+
+        // Apply binary search algorithm
+        int pos = binarySearch(lexiconList, pattern, 0, size - 1);
+
+        if(pos != -1) {
+            lexiconList.setSelectedIndex(pos);
+            lexiconList.ensureIndexIsVisible(pos);
+        }
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
+        insertUpdate(e);
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
+        // Sadly, my data isn't 100% sorted in alphabet order
+        // so binarySearch is not that efficient :'(
+        insertUpdate(e);
     }
 }
