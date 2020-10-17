@@ -117,7 +117,7 @@ public class DictionaryManagement {
     public void deleteWord(String wordTarget) {
         // REWRITE quicksort and binarySearch algorithm :((
         int index = -1;
-        for (int i = 0; i < dict.getLength(); i++) {
+        for (int i = 0; i < dict.vocab.length; i++) {
             if (dict.vocab[i].getWordTarget().equals(wordTarget)) {
                 index = i;
                 break;

@@ -53,6 +53,5 @@ public class DictionaryCommandline {
     public void dictionarySearcher() {
         String pattern = sc.nextLine();
         dictManage.tree.autoComplete(pattern);
-        //sc.close();
     }
 }
