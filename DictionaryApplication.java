@@ -102,10 +102,13 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         soundButton = new JButton(soundIcon);
         soundButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Set text to speech here
-                // DEBUG WHY IT DOESN'T HAVE SOUND
                 TextToSpeech audio = new TextToSpeech();
-                audio.getSpeech(lexiconList.getSelectedValue());
+                
+                // Setting the voice
+				audio.setVoice("cmu-slt-hsmm");
+
+				// TTS say something
+				audio.speak(lexiconList.getSelectedValue(), 2.0f, false, false);
             }
         });
     }

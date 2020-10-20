@@ -1,8 +1,3 @@
-// public class Run {
-//     public static void main(String[] args) {
-//         new DictionaryApplication();
-//     }
-// }
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
