@@ -230,23 +230,6 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         defDisplay.setText(definitionValue);
     }
 
-    private int binarySearch(JList<String> list, String pattern, int left, int right) {
-        if (right >= left) {
-            int mid = left + (right - left) / 2;
-            String currentWord = list.getModel().getElementAt(mid);
-            int cmpValue = pattern.compareTo(currentWord);
-            if (cmpValue > 0) {
-                return binarySearch(list, pattern, mid + 1, right);
-            } else if (cmpValue < 0) {
-                return binarySearch(list, pattern, left, mid - 1);
-            } else {
-                return mid;
-            }
-        }
-        // If it reaches here, then list doesn't contain pattern
-        return -1;
-    }
-
     private void createGoogleTranslateFrame() {
         JTextArea lexBox = new JTextArea();
         lexBox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
@@ -397,7 +380,7 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         // Store lexicon value that need to change
         JLabel saveItem = new JLabel();
 
-        JButton saveButton = new JButton("save lexicon");
+        JButton saveButton = new JButton("Get definition");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -442,6 +425,19 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         }
     }
 
+    private int linearSearch(JList<String> list, String pattern, int size) {
+        for(int i = 0; i < size; i++) {
+            int length = list.getModel().getElementAt(i).length();
+            if(length >= pattern.length()) {
+                String sub = list.getModel().getElementAt(i).substring(0, pattern.length());
+                if(sub.equals(pattern)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void insertUpdate(DocumentEvent e) {
         // I will optimize this algorithm later (using ternary search tree)
@@ -450,8 +446,8 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         // Get size of list
         int size = lexiconList.getModel().getSize();
 
-        // Apply binary search algorithm
-        int pos = binarySearch(lexiconList, pattern, 0, size - 1);
+        // Apply linear search algorithm
+        int pos = linearSearch(lexiconList, pattern, size);
 
         if (pos != -1) {
             lexiconList.setSelectedIndex(pos);

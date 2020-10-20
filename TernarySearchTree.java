@@ -1,9 +1,12 @@
-import java.util.Iterator;
 import java.util.Vector;
 
 public class TernarySearchTree {
     private Node root;
     private Vector<String> traversedArr = new Vector<>();
+
+    public Vector<String> getTraversedArr() {
+        return traversedArr;
+    }
 
     private Node insertUtil(Node r, char[] word, int pos) {
         if (r == null) {
@@ -112,13 +115,13 @@ public class TernarySearchTree {
         }
         // Identify starting node in TST
         nodeIdentify(root, pattern, 0);
-        printArray();
+        // printArray();
     }
     
-    private void printArray() {
-        Iterator<String> value = traversedArr.iterator();
-        while (value.hasNext()) { 
-            System.out.println(value.next()); 
-        }
-    }
+    // private void printArray() {
+    //     Iterator<String> value = traversedArr.iterator();
+    //     while (value.hasNext()) { 
+    //         System.out.println(value.next()); 
+    //     }
+    // }
 }

@@ -73,6 +73,7 @@ public class FileManager {
 
         String temp = sc.nextLine();
         int indexToAdd = dict.getIndexToAdd(word);
+        System.out.println(indexToAdd);
         boolean added = false;
         int i = 0;
 
@@ -86,7 +87,7 @@ public class FileManager {
         // Read and write file
         while(sc.hasNextLine()) {
             temp = sc.nextLine();
-            if(temp.equals("") && !added && indexToAdd == i) {
+            if(temp.equals("") && !added && i + 1 == indexToAdd) {
                 fw.write("\n" + "@" + lexicon + "\n" + definition + "\n" + "\n");
                 added = true;
             }
