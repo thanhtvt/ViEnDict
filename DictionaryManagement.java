@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,18 +13,6 @@ public class DictionaryManagement {
     public TernarySearchTree tree = new TernarySearchTree();
     public Scanner sc = new Scanner(System.in);
 
-    public void insertFromCommandLine() {
-        int numberOfWords = sc.nextInt();
-        sc.nextLine();
-        dict.setLength(numberOfWords);
-        for (int i = 0; i < dict.getLength(); i++) {
-            dict.vocab[i].setWordTarget(sc.nextLine());
-            dict.vocab[i].setWordExplain(sc.nextLine());
-            wordPair.put(dict.vocab[i].getWordTarget(), dict.vocab[i].getWordExplain());
-            tree.insert(dict.vocab[i].getWordTarget());
-        }
-    }
-
     /**
      * Insert data for dictionary from file.
      * @return number of words in file.
@@ -36,7 +25,6 @@ public class DictionaryManagement {
         // Read from file
         try {
             sc = new Scanner(file);
-            int i = 0;
             String lexicon, definition;
             while (sc.hasNextLine()) {
                 String temp = "10";
@@ -59,11 +47,10 @@ public class DictionaryManagement {
                         break;
                     }
                 }
-                dict.vocab[i].setWordTarget(lexicon);
-                dict.vocab[i].setWordExplain(definition);
+                Word word = new Word(lexicon, definition);
+                dict.addWordBeginning(word);
                 wordPair.put(lexicon, definition);
                 tree.insert(lexicon);
-                i++;
             }
             sc.close();
         } catch (FileNotFoundException e) {
@@ -79,7 +66,8 @@ public class DictionaryManagement {
             String target = sc.next();
             if (wordPair.get(target) != null) {
                 System.out.println("It means: " + wordPair.get(target));
-            } else {
+            } 
+            else {
                 System.out.println("Not found! Please wait for my upcoming update.");
             }
             System.out.print("Your word is: ");
@@ -87,60 +75,39 @@ public class DictionaryManagement {
         sc.close();
     }
 
-    private void insertIntoDictionary() {
-        int i = 0;
-        for (Map.Entry<String, String> mapElement : wordPair.entrySet()) {
-            String key = mapElement.getKey();
-            dict.vocab[i].setWordTarget(key);
-            String value = mapElement.getValue();
-            dict.vocab[i].setWordExplain(value);
-            i++;
-        }
-    }
-
-    public void addWord() {
-        // Increase number of words by 1.
-        dict.setLength(dict.getLength() + 1);
-
+    public void addWord() {        
         System.out.print("The word you add is: ");
-
         String newWord = sc.nextLine();
         System.out.print("It means: ");
         String newMeaning = sc.nextLine();
+
+        Word word = new Word(newWord, newMeaning);
+        dict.addWord(word);
         wordPair.put(newWord, newMeaning);
         tree.insert(newWord);
-
-        // Recall object
-        insertIntoDictionary();
     }
 
     public void deleteWord(String wordTarget) {
-        // REWRITE quicksort and binarySearch algorithm :((
-        int index = -1;
-        for (int i = 0; i < dict.vocab.length; i++) {
-            if (dict.vocab[i].getWordTarget().equals(wordTarget)) {
-                index = i;
-                break;
-            }
+        Word word = lookup(wordTarget);
+        if(word != null) {
+            int index = dict.wordsList.indexOf(word);
+            dict.deleteWord(word);
+            wordPair.remove(dict.vocabList.get(index));
+            tree.delete(dict.vocabList.get(index));
         }
-        if (index < 0) {
-            System.out.println("NOT FOUND!");
-            return;
-        } else {
-            wordPair.remove(dict.vocab[index].getWordTarget());
-            tree.delete(dict.vocab[index].getWordTarget());
-            if (index == dict.getLength() - 1) {
-                dict.vocab[index].setWordTarget("");
-                dict.vocab[index].setWordExplain("");
-            } else {
-                for (int i = index; i < dict.getLength() - 1; i++) {
-                    dict.vocab[i].setWordTarget(dict.vocab[i + 1].getWordTarget());
-                    dict.vocab[i].setWordExplain(dict.vocab[i + 1].getWordExplain());
-                }
-            }
+    }
+
+    private Word lookup(String target) {
+        if(target == null || target.equals("")) {
+            return null;
         }
-        dict.setLength(dict.getLength() - 1);
-        insertIntoDictionary();
+        int index = Arrays.binarySearch(dict.vocabList.toArray(), target);
+        if(index < 0) {
+            return null;
+        }
+        else {
+            return dict.wordsList.get(index);
+        }
     }
 
     public void editWord(String oldWord) {
@@ -154,8 +121,8 @@ public class DictionaryManagement {
         try {
             fw = new FileWriter("newDictionary.txt");
             fw.flush();
-            for(int i = 0; i < dict.getLength(); i++) {
-                fw.write(dict.vocab[i].getWordTarget() + "    " + dict.vocab[i].getWordExplain() + "\n");
+            for(int i = 0; i < dict.wordsList.size(); i++) {
+                fw.write(dict.vocabList.get(i) + "    " + dict.wordsList.get(i).getWordExplain() + "\n");
             }
             fw.close();
         } catch (IOException e) {

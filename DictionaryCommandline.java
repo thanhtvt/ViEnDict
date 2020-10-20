@@ -27,21 +27,16 @@ public class DictionaryCommandline {
 
     public void showAllWords() {
         System.out.println("Welcome to ViEnDictionary!!\n");
-        for (int i = -1; i < dictManage.dict.getLength(); i++) {
+        for (int i = -1; i < dictManage.dict.wordsList.size(); i++) {
             if (i != -1) {
-                String newWord = dictManage.dict.vocab[i].getWordTarget();
-                String newMeaning = dictManage.dict.vocab[i].getWordExplain();
+                String newWord = dictManage.dict.vocabList.get(i);
+                String newMeaning = dictManage.dict.wordsList.get(i).getWordExplain();
                 createOutput(i + 1, newWord, newMeaning);
             } 
             else {
                 createOutput(i + 1, "", "");
             }
         }
-    }
-
-    public void dictionaryBasic() {
-        dictManage.insertFromCommandLine();
-        showAllWords();
     }
 
     public void dictionaryAdvanced() {

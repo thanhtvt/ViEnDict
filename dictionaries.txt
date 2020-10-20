@@ -1,6 +1,0 @@
-hello	xin chao
-goodbye    tam biet
-kingdom    vuong quoc
-alone    mot minh
-punch    nam dam
-understandable    co the hieu duoc

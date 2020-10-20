@@ -1,23 +1,48 @@
+import java.util.ArrayList;
+
 public class Dictionary {
-    private int length;
-    private final int SIZE_OF_DICT = 60000;
-    public Word[] vocab;
+    public ArrayList<Word> wordsList;
+    public ArrayList<String> vocabList;
 
     public Dictionary() {
-        vocab = new Word[SIZE_OF_DICT];
-        for(int i = 0; i < SIZE_OF_DICT; i++) {
-            vocab[i] = new Word();
+        wordsList = new ArrayList<Word>();
+        vocabList = new ArrayList<String>();
+    }
+
+    public void addWordBeginning(Word word) {
+        wordsList.add(word);
+        vocabList.add(word.getWordTarget());
+    }
+
+    public void addWord(Word word) {
+        if(wordsList.size() == 0) {
+            wordsList.add(word);
+            vocabList.add(word.getWordTarget());
+        }
+        else {
+            int index = getIndexToAdd(word);
+            wordsList.add(index, word);
+            vocabList.add(index, word.getWordTarget());
         }
     }
 
-    public void setLength(int len) {
-        length = len;
-        vocab = new Word[length];
-        for(int i = 0; i < length; i++) {
-            vocab[i] = new Word();
+    public int getIndexToAdd(Word word) {
+        int i;
+        for(i = 0; i < wordsList.size(); i++) {
+            if(vocabList.get(i).compareTo(word.getWordTarget()) > 0) {
+                break;
+            }
         }
+        return i;
     }
-    public int getLength() {
-        return length;
+
+    public void deleteWord(Word word) {
+        if(word == null) {
+            return;
+        }
+        if(vocabList.contains(word.getWordTarget())) {
+            wordsList.remove(word);
+            vocabList.remove(word.getWordTarget());
+        }
     }
 }
