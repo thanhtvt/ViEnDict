@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,8 +9,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import marytts.util.data.audio.MonoAudioInputStream;
 import marytts.util.data.audio.StereoAudioInputStream;
 
@@ -19,7 +16,7 @@ import marytts.util.data.audio.StereoAudioInputStream;
  * A single Thread Audio Player Once used it has to be initialized again
  * 
  * @author GOXR3PLUS
- *
+ * @version modified by JonnyJack (me)
  */
 public class AudioPlayer extends Thread {
 
@@ -46,86 +43,6 @@ public class AudioPlayer extends Thread {
 	public AudioPlayer() {
 	}
 
-	public AudioPlayer(File audioFile) throws IOException, UnsupportedAudioFileException {
-		this.ais = AudioSystem.getAudioInputStream(audioFile);
-	}
-
-	public AudioPlayer(AudioInputStream ais) {
-		this.ais = ais;
-	}
-
-	public AudioPlayer(File audioFile, LineListener lineListener) throws IOException, UnsupportedAudioFileException {
-		this.ais = AudioSystem.getAudioInputStream(audioFile);
-		this.lineListener = lineListener;
-	}
-
-	public AudioPlayer(AudioInputStream ais, LineListener lineListener) {
-		this.ais = ais;
-		this.lineListener = lineListener;
-	}
-
-	public AudioPlayer(File audioFile, SourceDataLine line, LineListener lineListener)
-			throws IOException, UnsupportedAudioFileException {
-		this.ais = AudioSystem.getAudioInputStream(audioFile);
-		this.line = line;
-		this.lineListener = lineListener;
-	}
-
-	public AudioPlayer(AudioInputStream ais, SourceDataLine line, LineListener lineListener) {
-		this.ais = ais;
-		this.line = line;
-		this.lineListener = lineListener;
-	}
-
-	/**
-	 * 
-	 * @param audioFile
-	 *            audio file
-	 * @param line
-	 *            line
-	 * @param lineListener
-	 *            lineListener
-	 * @param outputMode
-	 *            if MONO, force output to be mono; if STEREO, force output to
-	 *            be STEREO; if LEFT_ONLY, play a mono signal over the left
-	 *            channel of a stereo output, or mute the right channel of a
-	 *            stereo signal; if RIGHT_ONLY, do the same with the right
-	 *            output channel.
-	 * @throws IOException
-	 *             IOException
-	 * @throws UnsupportedAudioFileException
-	 *             UnsupportedAudioFileException
-	 */
-	public AudioPlayer(File audioFile, SourceDataLine line, LineListener lineListener, int outputMode)
-			throws IOException, UnsupportedAudioFileException {
-		this.ais = AudioSystem.getAudioInputStream(audioFile);
-		this.line = line;
-		this.lineListener = lineListener;
-		this.outputMode = outputMode;
-	}
-
-	/**
-	 * 
-	 * @param ais
-	 *            ais
-	 * @param line
-	 *            line
-	 * @param lineListener
-	 *            lineListener
-	 * @param outputMode
-	 *            if MONO, force output to be mono; if STEREO, force output to
-	 *            be STEREO; if LEFT_ONLY, play a mono signal over the left
-	 *            channel of a stereo output, or mute the right channel of a
-	 *            stereo signal; if RIGHT_ONLY, do the same with the right
-	 *            output channel.
-	 */
-	public AudioPlayer(AudioInputStream ais, SourceDataLine line, LineListener lineListener, int outputMode) {
-		this.ais = ais;
-		this.line = line;
-		this.lineListener = lineListener;
-		this.outputMode = outputMode;
-	}
-
 	public void setAudio(AudioInputStream audio) {
 		if (status == Status.PLAYING) {
 			throw new IllegalStateException("Cannot set audio while playing");
@@ -144,13 +61,6 @@ public class AudioPlayer extends Thread {
 	}
 
 	/**
-	 * @return The SourceDataLine
-	 */
-	public SourceDataLine getLine() {
-		return line;
-	}
-
-	/**
 	 * Returns the GainValue
 	 */
 	public float getGainValue() {
@@ -160,8 +70,6 @@ public class AudioPlayer extends Thread {
 	/**
 	 * Sets Gain value. Line should be opened before calling this method. Linear
 	 * scale 0.0 <--> 1.0 Threshold Coed. : 1/2 to avoid saturation.
-	 * 
-	 * @param fGain
 	 */
 	public void setGain(float fGain) {
 		// Set the value
@@ -175,7 +83,6 @@ public class AudioPlayer extends Thread {
 
 	@Override
 	public void run() {
-
 		status = Status.PLAYING;
 		AudioFormat audioFormat = ais.getFormat();
 		if (audioFormat.getChannels() == 1) {

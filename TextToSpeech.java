@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,16 +8,15 @@ import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
-import marytts.modules.synthesis.Voice;
 
 /**
  * @author GOXR3PLUS
- *
+ * @version modified by JonnyJack (me)
  */
 public class TextToSpeech {
 
-	private AudioPlayer		tts;
-	private MaryInterface	marytts;
+	private AudioPlayer	tts;
+	private MaryInterface marytts;
 
 	/**
 	 * Constructor
@@ -30,15 +28,6 @@ public class TextToSpeech {
 		} catch (MaryConfigurationException ex) {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 		}
-	}
-
-	/**
-	 * Available voices in String representation
-	 * 
-	 * @return The available voices for MaryTTS
-	 */
-	public Collection<Voice> getAvailableVoices() {
-		return Voice.getAvailableVoices();
 	}
 
 	/**
