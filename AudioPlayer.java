@@ -149,5 +149,4 @@ public class AudioPlayer extends Thread {
 		}
 		line.close();
 	}
-
 }

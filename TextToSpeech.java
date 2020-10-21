@@ -32,7 +32,6 @@ public class TextToSpeech {
 
 	/**
 	 * Change the default voice of the MaryTTS
-	 * 
 	 * @param voice
 	 */
 	public void setVoice(String voice) {

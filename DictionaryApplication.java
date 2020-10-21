@@ -239,6 +239,7 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
 
         JTextArea defBox = new JTextArea();
         defBox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        defBox.setEditable(false);
         JScrollPane defScroll = new JScrollPane(defBox);
         defScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         defScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
