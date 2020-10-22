@@ -5,6 +5,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import org.json.JSONArray;
 
+/**
+ * @author archana
+ * @version modified by JonnyJack
+ */
 public class Translator {
     public String callUrlAndParseResult(String langFrom, String langTo, String word) throws Exception 
     {

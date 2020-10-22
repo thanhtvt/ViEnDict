@@ -188,7 +188,7 @@ public class DictionaryApplication extends JFrame implements DocumentListener {
         gbc.gridx = 4;
         gbc.gridy = 0;
         restartButton = new JButton("Restart");
-        taskBarPanel.add(restartButton, gbc);
+        // taskBarPanel.add(restartButton, gbc);
         restartButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
